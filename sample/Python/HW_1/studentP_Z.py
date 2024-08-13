@@ -14,9 +14,11 @@ average = total / length
 
 print(f"The average of {nums} is {average}")
 
+
 # A function that checks if a year is a leap year
 def is_leap(year):
     return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+
 
 # Example
 year = 2020
