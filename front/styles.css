@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #f2f2f2;
+    font-family: "Montserrat", sans-serif;
+}
+button {
+    font-family: "Montserrat", sans-serif;
+}
+p {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    margin: 40px auto 30px auto;
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+#user-table-body tr {
+    cursor: pointer;
+}
+
+.sort-buttons-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sort-buttons {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid #b9b1b1;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+}
+
+.sort-button {
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    padding: 5px 8px;
+}
+
+.sort-button.active {
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: rgba(0, 123, 255, 0.95);
+    color: white;
+}
+
+.red-row {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+.yellow-row {
+    background-color: rgba(255, 255, 0, 0.2);
+}
+.green-row {
+    background-color: rgba(0, 255, 0, 0.2);
+}
+.red-row:hover {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+.yellow-row:hover {
+    background-color: rgba(255, 255, 0, 0.4);
+}
+.green-row:hover {
+    background-color: rgba(0, 255, 0, 0.4);
+}
+
+#coefficients-table thead th {
+    font-size: 15px;
+}
+
