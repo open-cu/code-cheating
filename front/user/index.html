@@ -11,12 +11,21 @@
     <script type="module" src="./user.js" defer></script>
 </head>
 <body id="user-details">
-    <h1 id="user-header"></h1>
-    <table id="coefficients-table">
-        <thead>
-            <tr></tr>
-        </thead>
-        <tbody id="coefficients-table-body"></tbody>
-    </table>
+<a href="/" class="btn-main-page">вернуться на главную</a>
+<h1 id="user-header"></h1>
+
+<div class="thresholds">
+    <label for="yellow-threshold">Порог для желтого цвета (от 0 до 1): </label>
+    <input type="number" id="yellow-threshold" min="0" max="1" step="0.01" value="0.6">
+    <label for="red-threshold">Порог для красного цвета (от 0 до 1): </label>
+    <input type="number" id="red-threshold" min="0" max="1" step="0.01" value="0.8">
+</div>
+
+<table id="coefficients-table">
+    <thead>
+    <tr></tr>
+    </thead>
+    <tbody id="coefficients-table-body"></tbody>
+</table>
 </body>
 </html>

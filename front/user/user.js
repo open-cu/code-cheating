@@ -1,6 +1,27 @@
 import { coefficients } from '../mocks/coefficients.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    function getThresholdValues() {
+        const yellowThresholdInput = document.getElementById('yellow-threshold');
+        const redThresholdInput = document.getElementById('red-threshold');
+
+        const yellowThreshold = yellowThresholdInput ? parseFloat(yellowThresholdInput.value) || 0.6 : 0.6;
+        const redThreshold = redThresholdInput ? parseFloat(redThresholdInput.value) || 0.8 : 0.8;
+        return { yellowThreshold, redThreshold };
+    }
+
+    function getCellClass(coefficient) {
+        const { yellowThreshold, redThreshold } = getThresholdValues();
+
+        if (coefficient > redThreshold) {
+            return 'red-row';
+        } else if (coefficient > yellowThreshold) {
+            return 'yellow-row';
+        } else {
+            return 'green-row';
+        }
+    }
+
     function fetchUserData() {
         const users = coefficients.table;
 
@@ -17,37 +38,42 @@ document.addEventListener('DOMContentLoaded', () => {
             thead.appendChild(th);
         });
 
-        function getRowClass(user) {
-            const sum = user.coefficients.reduce((acc, item) => acc + item.coefficient, 0);
-
-            if (sum > 8) {
-                return 'red-row';
-            } else if (sum > 7) {
-                return 'yellow-row';
-            } else {
-                return 'green-row';
-            }
-        }
-
         const tbody = document.querySelector('#coefficients-table-body');
+        tbody.innerHTML = '';
+
         users.forEach(user => {
             const row = document.createElement('tr');
-            row.className = getRowClass(user);
 
             const idCell = document.createElement('td');
-            idCell.textContent = user.id_user;
+            const link = document.createElement('a');
+            link.href = `http://127.0.0.1:8080/user/?id=${user.id_user}`;
+            link.textContent = user.id_user;
+            link.classList.add('user-link-cell');
+            idCell.appendChild(link);
             row.appendChild(idCell);
 
             const userCoefficients = user.coefficients.map(item => item.coefficient);
             homeworkIds.forEach(id => {
                 const td = document.createElement('td');
                 const coefficient = userCoefficients.find((_, index) => user.coefficients[index]?.id_homework === id) || '-';
+
+                if (typeof coefficient === 'number') {
+                    td.className = getCellClass(coefficient);
+                }
+
                 td.textContent = coefficient;
                 row.appendChild(td);
             });
 
             tbody.appendChild(row);
         });
+    }
+
+    const yellowThresholdInput = document.getElementById('yellow-threshold');
+    const redThresholdInput = document.getElementById('red-threshold');
+    if (yellowThresholdInput && redThresholdInput) {
+        yellowThresholdInput.addEventListener('input', fetchUserData);
+        redThresholdInput.addEventListener('input', fetchUserData);
     }
 
     fetchUserData();
