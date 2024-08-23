@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+<main>
+    <h1>Таблица со всеми студентами</h1>
+    <div class="sort-buttons-container">
+        <p>Сортировать по:</p>
+        <div class="sort-buttons">
+            <button id="sort-average" class="sort-button">среднему коэффициенту</button>
+            <button id="sort-median" class="sort-button">медианному коэффициенту</button>
+            <button id="sort-maximum" class="sort-button">максимальному коэффициенту</button>
+        </div>
+    </div>
+    <div class="thresholds">
+        <div>
+            <label for="yellow-threshold">Нижний порог для желтого цвета (от 0 до 1): </label>
+            <input type="number" id="yellow-threshold" min="0" max="1" step="0.01" value="0.3">
+        </div>
+       <div>
+           <label for="red-threshold">Нижний порог для красного цвета (от 0 до 1): </label>
+           <input type="number" id="red-threshold" min="0" max="1" step="0.01" value="0.5">
+       </div>
+    </div>
+    <table id="users-table">
+        <thead>
+        <tr>
+            <th>Название файла</th>
+            <th>Курс</th>
+            <th>Средний коэфицент</th>
+            <th>Макс. коэфицент</th>
+            <th>Медианный коэфицент</th>
+        </tr>
+        </thead>
+        <tbody id="user-table-body"></tbody>
+    </table>
+</main>
+<script type="module" src="/main.js"></script>
+</body>
+</html>
