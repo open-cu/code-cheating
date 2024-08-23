@@ -1,4 +1,4 @@
-import { coefficients } from '../mocks/coefficients.js';
+import axios from 'axios';
 
 document.addEventListener('DOMContentLoaded', () => {
     function getThresholdValues() {
@@ -23,50 +23,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchUserData() {
-        const users = coefficients.table;
+        const userId = new URLSearchParams(window.location.search).get('id');
+        axios.get(`/get/user/${userId}`)
+            .then(response => {
+                const userData = response.data;
+                const users = userData.table;
 
-        const userHeader = document.getElementById('user-header');
-        userHeader.textContent = `ID пользователя: ${coefficients.id_user} | ${coefficients.name}`;
+                const userHeader = document.getElementById('user-header');
+                userHeader.textContent = `ID пользователя: ${userData.id_user} | ${userData.name}`;
 
-        const homeworkIds = users[0].coefficients.map(item => item.id_homework);
+                const homeworkIds = users[0].coefficients.map(item => item.id_homework);
 
-        const thead = document.querySelector('#coefficients-table thead tr');
-        thead.innerHTML = '<th>ID задания / ID студента</th>';
-        homeworkIds.forEach(id => {
-            const th = document.createElement('th');
-            th.textContent = `ДЗ ${id}`;
-            thead.appendChild(th);
-        });
+                const thead = document.querySelector('#coefficients-table thead tr');
+                thead.innerHTML = '<th>ID задания / ID студента</th>';
+                homeworkIds.forEach(id => {
+                    const th = document.createElement('th');
+                    th.textContent = `ДЗ ${id}`;
+                    thead.appendChild(th);
+                });
 
-        const tbody = document.querySelector('#coefficients-table-body');
-        tbody.innerHTML = '';
+                const tbody = document.querySelector('#coefficients-table-body');
+                tbody.innerHTML = '';
 
-        users.forEach(user => {
-            const row = document.createElement('tr');
+                users.forEach(user => {
+                    const row = document.createElement('tr');
 
-            const idCell = document.createElement('td');
-            const link = document.createElement('a');
-            link.href = `http://127.0.0.1:8080/user/?id=${user.id_user}`;
-            link.textContent = user.id_user;
-            link.classList.add('user-link-cell');
-            idCell.appendChild(link);
-            row.appendChild(idCell);
+                    const idCell = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `http://127.0.0.1:8080/user/?id=${user.id_user}`;
+                    link.textContent = user.id_user;
+                    link.classList.add('user-link-cell');
+                    idCell.appendChild(link);
+                    row.appendChild(idCell);
 
-            const userCoefficients = user.coefficients.map(item => item.coefficient);
-            homeworkIds.forEach(id => {
-                const td = document.createElement('td');
-                const coefficient = userCoefficients.find((_, index) => user.coefficients[index]?.id_homework === id) || '-';
+                    const userCoefficients = user.coefficients.map(item => item.coefficient);
+                    homeworkIds.forEach(id => {
+                        const td = document.createElement('td');
+                        const coefficient = userCoefficients.find((_, index) => user.coefficients[index]?.id_homework === id) || '-';
 
-                if (typeof coefficient === 'number') {
-                    td.className = getCellClass(coefficient);
-                }
+                        if (typeof coefficient === 'number') {
+                            td.className = getCellClass(coefficient);
+                        }
 
-                td.textContent = coefficient;
-                row.appendChild(td);
+                        td.textContent = coefficient;
+                        row.appendChild(td);
+                    });
+
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
             });
-
-            tbody.appendChild(row);
-        });
     }
 
     const yellowThresholdInput = document.getElementById('yellow-threshold');

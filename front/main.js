@@ -1,4 +1,4 @@
-import { users } from './mocks/all-user.js';
+import axios from 'axios';
 
 function getThresholdValues() {
     const yellowThreshold = parseFloat(document.getElementById('yellow-threshold').value) || 0.3;
@@ -37,7 +37,7 @@ function updateTable(data) {
     addRowClickListeners();
 }
 
-function sortData(criterion) {
+function sortData(criterion, users) {
     const sortedUsers = [...users].sort((a, b) => b[criterion] - a[criterion]);
     updateTable(sortedUsers);
 }
@@ -58,30 +58,43 @@ function setActiveButton(activeId) {
     });
 }
 
-document.getElementById('sort-average').addEventListener('click', () => {
-    setActiveButton('sort-average');
-    sortData('average_coefficient');
-});
+function fetchDataAndInitialize() {
+    axios.get('/get/all-users')
+        .then(response => {
+            const users = response.data;
 
-document.getElementById('sort-median').addEventListener('click', () => {
-    setActiveButton('sort-median');
-    sortData('median_coefficient');
-});
+            sortData('average_coefficient', users);
+            setActiveButton('sort-average');
 
-document.getElementById('sort-maximum').addEventListener('click', () => {
-    setActiveButton('sort-maximum');
-    sortData('maximum_coefficient');
-});
+            // Установка обработчиков событий
+            document.getElementById('sort-average').addEventListener('click', () => {
+                setActiveButton('sort-average');
+                sortData('average_coefficient', users);
+            });
 
-document.getElementById('yellow-threshold').addEventListener('input', () => {
-    sortData(document.querySelector('.sort-button.active').id.split('-')[1]);
-});
+            document.getElementById('sort-median').addEventListener('click', () => {
+                setActiveButton('sort-median');
+                sortData('median_coefficient', users);
+            });
 
-document.getElementById('red-threshold').addEventListener('input', () => {
-    sortData(document.querySelector('.sort-button.active').id.split('-')[1]);
-});
+            document.getElementById('sort-maximum').addEventListener('click', () => {
+                setActiveButton('sort-maximum');
+                sortData('maximum_coefficient', users);
+            });
+
+            document.getElementById('yellow-threshold').addEventListener('input', () => {
+                sortData(document.querySelector('.sort-button.active').id.split('-')[1], users);
+            });
+
+            document.getElementById('red-threshold').addEventListener('input', () => {
+                sortData(document.querySelector('.sort-button.active').id.split('-')[1], users);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching users:', error);
+        });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    sortData('average_coefficient');
-    setActiveButton('sort-average');
+    fetchDataAndInitialize();
 });
