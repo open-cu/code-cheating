@@ -1,0 +1,16 @@
+property,value,type
+reportName,HW_1,string
+kgramLength,23,number
+kgramsInWindow,17,number
+language,python,string
+maxFingerprintCount,null,object
+maxFingerprintPercentage,null,object
+minFragmentLength,0,number
+limitResults,null,object
+minSimilarity,0,number
+sortBy,total overlap,string
+fragmentSortBy,file order,string
+kgramData,false,boolean
+createdAt,2024-08-23T06:19:21.511Z,string
+languageDetected,false,boolean
+warnings,,object

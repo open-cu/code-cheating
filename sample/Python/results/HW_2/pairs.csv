@@ -1,0 +1,2 @@
+id,leftFileId,leftFilePath,rightFileId,rightFilePath,similarity,totalOverlap,longestFragment,leftCovered,rightCovered
+61,0,/tmp/dolos-unzip-XXXXXXgeKGge/studentM_Y.py,1,/tmp/dolos-unzip-XXXXXXgeKGge/studentP_Z.py,0.2318840579710145,16,7,8,8

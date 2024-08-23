@@ -1,0 +1,5 @@
+s1 = input()
+s2 = input()
+s1 *= max(2, len(s2) // len(s1))
+# print(s1)
+print('YES' if s2 in s1 or s2[::-1] in s1 else 'NO')

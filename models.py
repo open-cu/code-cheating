@@ -1,26 +1,27 @@
+from uuid import UUID
+
 from pydantic import BaseModel
 
 
 class User(BaseModel):
-    user_id: int
+    user_id: UUID
     name: str
     level: int
-    average_coefficient: int
-    maximum_coefficient: int
-    median_coefficient: int
+    average_coefficient: float
+    maximum_coefficient: float
+    median_coefficient: float
 
 
 class Coefficient(BaseModel):
     homework_id: int
-    coefficient: int
+    coefficient: float
 
 
 class TableItem(BaseModel):
-    user_id: int
+    name: str
     coefficients: list[Coefficient]
 
 
 class TableUser(BaseModel):
-    user_id: int
     name: str
     table: list[TableItem]

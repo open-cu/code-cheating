@@ -73,8 +73,9 @@ async def process_homework(dolos, homework, subject_path, base_results_dir, prog
 async def main():
     dolos = DolosAPI()
 
-    subject_path = pathlib.Path(input("Absolute or relative subject path: "))
-    programming_language = input("Programming language: ")
+    subject_path = pathlib.Path(input(
+        "Absolute or relative subject path: ") or r"C:\Users\p6282\Desktop\my_projects\web\code-cheating\sample\Python")
+    programming_language = input("Programming language: ") or "python"
 
     base_results_dir = subject_path.joinpath("results")
     base_results_dir.mkdir(exist_ok=True)
