@@ -1,5 +1,8 @@
 import apiClient from './apiClient';
 
+let originalUsers = [];
+let sortedUsers = [];
+
 function getThresholdValues() {
     const yellowThreshold = parseFloat(document.getElementById('yellow-threshold').value) || 0.3;
     const redThreshold = parseFloat(document.getElementById('red-threshold').value) || 0.5;
@@ -44,8 +47,22 @@ function updateTable(data) {
     addRowClickListeners();
 }
 
-function sortData(criterion, users) {
-    const sortedUsers = [...users].sort((a, b) => b[criterion] - a[criterion]);
+function updateStyles() {
+    const rows = document.querySelectorAll('#user-table-body tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const user = sortedUsers.find(u => u.name === row.dataset.name);
+
+        if (user) {
+            cells[2].style = getCellStyle(user.average_coefficient);
+            cells[3].style = getCellStyle(user.maximum_coefficient);
+            cells[4].style = getCellStyle(user.median_coefficient);
+        }
+    });
+}
+
+function sortData(criterion) {
+    sortedUsers = [...originalUsers].sort((a, b) => b[criterion] - a[criterion]);
     updateTable(sortedUsers);
 }
 
@@ -68,32 +85,31 @@ function setActiveButton(activeId) {
 function fetchDataAndInitialize() {
     apiClient.get('/get/all_users')
         .then(response => {
-            const users = response.data;
+            originalUsers = response.data;
 
-            sortData('average_coefficient', users);
+            sortData('average_coefficient');
             setActiveButton('sort-average');
 
             document.getElementById('sort-average').addEventListener('click', () => {
                 setActiveButton('sort-average');
-                sortData('average_coefficient', users);
+                sortData('average_coefficient');
             });
 
             document.getElementById('sort-median').addEventListener('click', () => {
                 setActiveButton('sort-median');
-                sortData('median_coefficient', users);
+                sortData('median_coefficient');
             });
 
             document.getElementById('sort-maximum').addEventListener('click', () => {
                 setActiveButton('sort-maximum');
-                sortData('maximum_coefficient', users);
+                sortData('maximum_coefficient');
             });
 
-            document.getElementById('yellow-threshold').addEventListener('input', () => {
-                sortData(document.querySelector('.sort-button.active').id.split('-')[1], users);
-            });
-
-            document.getElementById('red-threshold').addEventListener('input', () => {
-                sortData(document.querySelector('.sort-button.active').id.split('-')[1], users);
+            const thresholdInputs = [document.getElementById('yellow-threshold'), document.getElementById('red-threshold')];
+            thresholdInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    updateStyles();
+                });
             });
         })
         .catch(error => {
