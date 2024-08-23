@@ -1,14 +1,22 @@
+import asyncio
 import csv
 import logging
 import os
-import uuid
 import statistics
 
+import uvicorn
 from fastapi import FastAPI
 
+# from init_app import run_dolos_validation
+import init_app
 from models import User, Coefficient, TableItem, TableUser
 
 app = FastAPI()
+
+
+# @app.on_event("startup")
+# async def startup():
+#     await init_app.run_dolos_validation()
 
 
 def get_username(path: str) -> str:
@@ -56,7 +64,6 @@ async def get_users() -> list[User]:
     result_users = []
     for username, coefficients in users.items():
         result_users.append(User(
-            user_id=uuid.uuid4(),
             name=username,
             level=1,
             average_coefficient=statistics.mean(coefficients),
@@ -108,3 +115,7 @@ async def say_hello(user_name: str) -> TableUser:
     table.table.sort(key=lambda x: sum([c.coefficient for c in x.coefficients]), reverse=True)
 
     return table
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,8 +1,9 @@
 import asyncio
 import io
+import os
 import pathlib
 import zipfile
-import os
+
 from dolos_api import DolosAPI
 
 
@@ -73,9 +74,8 @@ async def process_homework(dolos, homework, subject_path, base_results_dir, prog
 async def main():
     dolos = DolosAPI()
 
-    subject_path = pathlib.Path(input(
-        "Absolute or relative subject path: ") or r"C:\Users\p6282\Desktop\my_projects\web\code-cheating\sample\Python")
-    programming_language = input("Programming language: ") or "python"
+    subject_path = pathlib.Path(os.path.join(os.getcwd(), "sample", "Python"))
+    programming_language = "python"
 
     base_results_dir = subject_path.joinpath("results")
     base_results_dir.mkdir(exist_ok=True)
