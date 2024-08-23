@@ -6,12 +6,27 @@ import statistics
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-# from init_app import run_dolos_validation
-import init_app
 from models import User, Coefficient, TableItem, TableUser
 
+
 app = FastAPI()
+
+origins = [
+    "http://localhost:4000",  # Ваш фронтенд домен
+    "http://localhost:8000",  # Ваш бэкенд домен (если запросы идут с другого домена)
+    "http://0.0.0.0:8000",    # Если ваш фронтенд запрашивает данные с этого адреса
+    # Добавьте другие домены, если нужно
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Указываем, с каких источников разрешены запросы
+    allow_credentials=True,
+    allow_methods=["*"],    # Разрешенные методы (GET, POST и т.д.)
+    allow_headers=["*"],    # Разрешенные заголовки
+)
+
 
 
 # @app.on_event("startup")
@@ -70,7 +85,6 @@ async def get_users() -> list[User]:
             maximum_coefficient=max(coefficients),
             median_coefficient=statistics.median(coefficients),
         ))
-
     return result_users
 
 

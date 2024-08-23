@@ -1,4 +1,4 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 
 function getThresholdValues() {
     const yellowThreshold = parseFloat(document.getElementById('yellow-threshold').value) || 0.3;
@@ -20,8 +20,7 @@ function getCellClass(value) {
 
 function createTableRow(user) {
     return `
-        <tr data-id="${user.id_user}">
-            <td>${user.id_user}</td>
+        <tr data-name="${user.name}">
             <td>${user.name}</td>
             <td>${user.level}</td>
             <td class="${getCellClass(user.average_coefficient)}">${user.average_coefficient.toFixed(4)}</td>
@@ -46,8 +45,8 @@ function addRowClickListeners() {
     const rows = document.querySelectorAll('#user-table-body tr');
     rows.forEach(row => {
         row.addEventListener('click', () => {
-            const userId = row.getAttribute('data-id');
-            window.location.href = `user?id=${userId}`;
+            const userName = row.getAttribute('data-name');
+            window.location.href = `./user/index.html?name=${userName}`;
         });
     });
 }
@@ -59,14 +58,13 @@ function setActiveButton(activeId) {
 }
 
 function fetchDataAndInitialize() {
-    axios.get('/get/all-users')
+    apiClient.get('/get/all_users')
         .then(response => {
             const users = response.data;
 
             sortData('average_coefficient', users);
             setActiveButton('sort-average');
 
-            // Установка обработчиков событий
             document.getElementById('sort-average').addEventListener('click', () => {
                 setActiveButton('sort-average');
                 sortData('average_coefficient', users);

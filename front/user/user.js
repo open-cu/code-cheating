@@ -1,4 +1,4 @@
-import axios from 'axios';
+import apiClient from "../apiClient.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     function getThresholdValues() {
@@ -23,16 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchUserData() {
-        const userId = new URLSearchParams(window.location.search).get('id');
-        axios.get(`/get/user/${userId}`)
+        const userName = new URLSearchParams(window.location.search).get('name');
+        apiClient.get(`/get/user/${userName}`)
             .then(response => {
                 const userData = response.data;
+
                 const users = userData.table;
 
                 const userHeader = document.getElementById('user-header');
-                userHeader.textContent = `ID пользователя: ${userData.id_user} | ${userData.name}`;
+                userHeader.textContent = `Название файла: ${userData.name}`;
 
-                const homeworkIds = users[0].coefficients.map(item => item.id_homework);
+                const homeworkIds = users[0].coefficients.map(item => item.homework_id);
 
                 const thead = document.querySelector('#coefficients-table thead tr');
                 thead.innerHTML = '<th>ID задания / ID студента</th>';
@@ -50,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const idCell = document.createElement('td');
                     const link = document.createElement('a');
-                    link.href = `http://127.0.0.1:8080/user/?id=${user.id_user}`;
-                    link.textContent = user.id_user;
+                    link.href = `http://127.0.0.1:8080/user/?name=${user.name}`;
+                    link.textContent = user.name;
                     link.classList.add('user-link-cell');
                     idCell.appendChild(link);
                     row.appendChild(idCell);
@@ -59,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const userCoefficients = user.coefficients.map(item => item.coefficient);
                     homeworkIds.forEach(id => {
                         const td = document.createElement('td');
-                        const coefficient = userCoefficients.find((_, index) => user.coefficients[index]?.id_homework === id) || '-';
+                        const coefficient = user.coefficients.find((item) => item.homework_id === id)?.coefficient || '-';
 
                         if (typeof coefficient === 'number') {
                             td.className = getCellClass(coefficient);
                         }
 
-                        td.textContent = coefficient;
+                        td.textContent = coefficient !== '-' ? coefficient.toFixed(2) : '-';
                         row.appendChild(td);
                     });
 
