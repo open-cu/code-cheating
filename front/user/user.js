@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const idCell = document.createElement('td');
                     const link = document.createElement('a');
-                    link.href = `http://127.0.0.1:8080/user/?name=${user.name}`;
+                    link.href = `http://localhost:4000/user/?name=${user.name}`;
                     link.textContent = user.name;
                     link.classList.add('user-link-cell');
                     idCell.appendChild(link);
