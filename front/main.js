@@ -6,16 +6,24 @@ function getThresholdValues() {
     return { yellowThreshold, redThreshold };
 }
 
-function getCellClass(value) {
+function getCellStyle(value) {
     const { yellowThreshold, redThreshold } = getThresholdValues();
 
-    if (value > redThreshold) {
-        return 'red-row';
-    } else if (value > yellowThreshold) {
-        return 'yellow-row';
+    let color = '';
+    let opacity = 0.5;
+
+    if (value >= redThreshold) {
+        opacity += 0.5 * (value - redThreshold) / (1 - redThreshold);
+        color = `rgba(255, 0, 0, ${opacity})`;
+    } else if (value >= yellowThreshold) {
+        opacity += 0.5 * (value - yellowThreshold) / (redThreshold - yellowThreshold);
+        color = `rgba(255, 255, 0, ${opacity})`;
     } else {
-        return 'green-row';
+        opacity += 0.5 * value / yellowThreshold;
+        color = `rgba(0, 255, 0, ${opacity})`;
     }
+
+    return `background-color: ${color};`;
 }
 
 function createTableRow(user) {
@@ -23,9 +31,9 @@ function createTableRow(user) {
         <tr data-name="${user.name}">
             <td>${user.name}</td>
             <td>${user.level}</td>
-            <td class="${getCellClass(user.average_coefficient)}">${user.average_coefficient.toFixed(4)}</td>
-            <td class="${getCellClass(user.maximum_coefficient)}">${user.maximum_coefficient.toFixed(4)}</td>
-            <td class="${getCellClass(user.median_coefficient)}">${user.median_coefficient.toFixed(4)}</td>
+            <td style="${getCellStyle(user.average_coefficient)}">${user.average_coefficient.toFixed(4)}</td>
+            <td style="${getCellStyle(user.maximum_coefficient)}">${user.maximum_coefficient.toFixed(4)}</td>
+            <td style="${getCellStyle(user.median_coefficient)}">${user.median_coefficient.toFixed(4)}</td>
         </tr>
     `;
 }

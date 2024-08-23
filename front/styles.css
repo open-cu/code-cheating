@@ -64,25 +64,6 @@ th, td {
     color: white;
 }
 
-.red-row {
-    background-color: rgba(255, 0, 0, 0.5);
-}
-.yellow-row {
-    background-color: rgba(255, 255, 0, 0.5);
-}
-.green-row {
-    background-color: rgba(0, 255, 0, 0.5);
-}
-.red-row:hover {
-    background-color: rgba(255, 0, 0, 0.8);
-}
-.yellow-row:hover {
-    background-color: rgba(255, 255, 0, 0.8);
-}
-.green-row:hover {
-    background-color: rgba(0, 255, 0, 0.8);
-}
-
 #coefficients-table thead th {
     font-size: 15px;
 }

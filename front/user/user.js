@@ -10,16 +10,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return { yellowThreshold, redThreshold };
     }
 
-    function getCellClass(coefficient) {
+    function getCellStyle(coefficient) {
         const { yellowThreshold, redThreshold } = getThresholdValues();
 
-        if (coefficient > redThreshold) {
-            return 'red-row';
-        } else if (coefficient > yellowThreshold) {
-            return 'yellow-row';
+        let color = '';
+        let opacity = 0.5;
+
+        if (coefficient >= redThreshold) {
+            opacity += 0.5 * (coefficient - redThreshold) / (1 - redThreshold);
+            color = `rgba(255, 0, 0, ${opacity})`;
+        } else if (coefficient >= yellowThreshold) {
+            opacity += 0.5 * (coefficient - yellowThreshold) / (redThreshold - yellowThreshold);
+            color = `rgba(255, 255, 0, ${opacity})`;
         } else {
-            return 'green-row';
+            opacity += 0.5 * coefficient / yellowThreshold;
+            color = `rgba(0, 255, 0, ${opacity})`;
         }
+
+        return `background-color: ${color};`;
     }
 
     function fetchUserData() {
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const coefficient = user.coefficients.find((item) => item.homework_id === id)?.coefficient || '-';
 
                         if (typeof coefficient === 'number') {
-                            td.className = getCellClass(coefficient);
+                            td.style = getCellStyle(coefficient);
                         }
 
                         td.textContent = coefficient !== '-' ? coefficient.toFixed(2) : '-';
